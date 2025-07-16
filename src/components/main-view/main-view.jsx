@@ -1,33 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react';
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 
 export const MainView = () => {
-  const [movies, setMovies] = useState([
-    {
-      id: 1,
-      title: "Vertigo",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/7/75/Vertigomovie_restoration.jpg",
-      author: "Alfred Hitchcock"
-    },
-    {
-      id: 2,
-      title: "Rope",
-      image:
-        "https://upload.wikimedia.org/wikipedia/en/8/8e/Rope2.jpg",
-      author: "Alfred Hitchcock"
-    },
-    {
-      id: 3,
-      title: "All About My Mother",
-      image:
-        "https://upload.wikimedia.org/wikipedia/en/d/d7/All_about_my_mother.jpg",
-      author: "Pedro Almodovar"
-    },
-  ]);
+  const [movies, setMovies] = useState([]);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
+
+  useEffect(() => {
+    fetch("https://mymyflixapp-46a281636c8c.herokuapp.com/movies")
+      .then((response) => response.json())
+      .then((data) => {
+        const moviesFromApi = data.map((movie) => {
+          return {
+            id: movie._id?.$oid || movie._id,
+            title: movie.Title,
+            image: movie.ImagePath,
+            director: movie.Director?.Name
+          };
+        });
+
+        setMovies(moviesFromApi);
+      });
+  }, []);
 
   if (selectedMovie) {
     return <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />;
