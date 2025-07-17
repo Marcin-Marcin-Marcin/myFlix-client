@@ -9,8 +9,13 @@ export const MainView = () => {
   const storedToken = localStorage.getItem("token");
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
+<<<<<<< Updated upstream
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
+=======
+  const [user, setUser] = useState(storedUser? storedUser : null);
+  const [token, setToken] = useState(storedToken? storedToken : null);
+>>>>>>> Stashed changes
 
   useEffect(() => {
     if (!token) return;
@@ -36,11 +41,19 @@ export const MainView = () => {
   if (!user) {
     return (
       <>
+<<<<<<< Updated upstream
         <LoginView
           onLoggedIn={(user, token) => {
             setUser(user);
             setToken(token);
           }}
+=======
+      <LoginView
+        onLoggedIn={(user, token) => {
+          setUser(user);
+          setToken(token);
+        }}
+>>>>>>> Stashed changes
         />
         <p className="separator">or</p>
         <SignupView />
@@ -60,6 +73,10 @@ export const MainView = () => {
         >
           Logout
         </button>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
       </>
     );
