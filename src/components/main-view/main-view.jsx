@@ -3,6 +3,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { ProfileView } from "../profile-view/profile-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -92,7 +93,7 @@ export const MainView = () => {
                 <Col>The list is empty!</Col>
               ) : (
                 <Col md={8}>
-                  <MovieView movies={movies} />
+                  <MovieView movies={movies} user={user} token={token} setUser={setUser} />
                 </Col>
               )
             }
@@ -108,13 +109,25 @@ export const MainView = () => {
                 <>
                   {movies.map((movie) => (
                     <Col className="mb-4" key={movie.id} md={3}>
-                      <MovieCard movie={movie} />
+                      <MovieCard movie={movie} user={user} token={token} setUser={setUser} />
                     </Col>
                   ))}
                 </>
               )
             }
           />
+          <Route
+  path="/profile"
+  element={
+    !user ? (
+      <Navigate to="/login" replace />
+    ) : (
+      <Col md={8}>
+        <ProfileView movies={movies} />
+      </Col>
+    )
+  }
+/>
         </Routes>
       </Row>
     </BrowserRouter>
