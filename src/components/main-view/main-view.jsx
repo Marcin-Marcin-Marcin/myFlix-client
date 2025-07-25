@@ -35,7 +35,9 @@ export const MainView = () => {
             id: movie._id?.$oid || movie._id,
             title: movie.Title,
             image: movie.ImagePath,
-            director: movie.Director?.Name
+            director: movie.Director?.Name,
+            description: movie.Description,
+            genre: movie.Genre?.Name || "Unknown Genre"
           };
         });
 

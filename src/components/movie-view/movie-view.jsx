@@ -44,7 +44,9 @@ export const MovieView = ({ movies, user, token, setUser }) => {
         <Card.Text><strong>Director:</strong> {movie.director}</Card.Text>
 
         {!isFavorite && (
-          <Button variant="outline-primary" className="me-2" onClick={addToFavorites}>
+          <Button variant="primary"
+          className="me-2 mt-2 w-100"
+          onClick={addToFavorites}>
             Add to Favorites
           </Button>
         )}

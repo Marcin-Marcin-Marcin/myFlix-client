@@ -33,7 +33,11 @@ export const MovieCard = ({ movie, user, token, setUser }) => {
       <Card.Img variant="top" src={movie.image} />
       <Card.Body>
         <Card.Title>{movie.title}</Card.Title>
-        <Card.Text>{movie.director}</Card.Text>
+        <Card.Text>
+          <strong>Director:</strong> {movie.director}<br />
+          <strong>Genre:</strong> {movie.genre}<br />
+          <small className="text-muted">{movie.description.slice(0, 100)}...</small>
+          </Card.Text>
 
         <div className="d-flex justify-content-between align-items-center mt-3">
           <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
@@ -42,8 +46,8 @@ export const MovieCard = ({ movie, user, token, setUser }) => {
 
           {!isFavorite && user && (
             <Button
-              variant="outline-primary"
-              size="sm"
+              variant="primary"
+              size="btn-sm w-100 mt-2"
               onClick={addToFavorites}
             >
               + Favorite
@@ -59,7 +63,9 @@ MovieCard.propTypes = {
   movie: PropTypes.shape({
     title: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
-    director: PropTypes.string
+    director: PropTypes.string,
+    genre: PropTypes.string,
+    description: PropTypes.string
   }).isRequired,
   user: PropTypes.object,
   token: PropTypes.string,
