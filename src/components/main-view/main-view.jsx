@@ -11,6 +11,7 @@ import Button from "react-bootstrap/Button";
 import {
   BrowserRouter, Routes, Route, Navigate
 } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 
 export const MainView = () => {
@@ -21,14 +22,25 @@ export const MainView = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
+  const [loading, setLoading] = useState(false);
+  const [searchItem, setSearchItem] = useState("");
 
   useEffect(() => {
     if (!token) return;
 
+    setLoading(true);
+
     fetch("https://mymyflixapp-46a281636c8c.herokuapp.com/movies", {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        
+        return response.json();
+        })
+
       .then((data) => {
         const moviesFromApi = data.map((movie) => {
           return {
@@ -42,8 +54,19 @@ export const MainView = () => {
         });
 
         setMovies(moviesFromApi);
-      });
+      })
+      .catch((err) => {
+        console.error("Error fetching movies:", err); 
+        setMovies([]);                               
+      })
+      .finally(() => setLoading(false)); 
   }, [token]);
+
+const filteredMovies = searchItem
+    ? movies.filter((m) =>
+        m.title.toLowerCase().includes(searchItem.toLowerCase())
+      )
+    : movies;
 
  return (
     <BrowserRouter>
@@ -53,7 +76,11 @@ export const MainView = () => {
           setUser(null);
           setToken(null);
           localStorage.clear();
+          setSearchItem("");
         }}
+      searchItem={searchItem} 
+      setSearchItem={setSearchItem}
+
       />
       <Row className="justify-content-md-center">
         <Routes>
@@ -91,6 +118,10 @@ export const MainView = () => {
             element={
               !user ? (
                 <Navigate to="/login" replace />
+              ) : loading ? (
+                <div className="d-flex justify-content-center align-items-center vh-100">
+                  <BeatLoader />
+                </div>
               ) : movies.length === 0 ? (
                 <Col>The list is empty!</Col>
               ) : (
@@ -105,11 +136,17 @@ export const MainView = () => {
             element={
               !user ? (
                 <Navigate to="/login" replace />
-              ) : movies.length === 0 ? (
+              ) : loading ? (
+                <div className="d-flex justify-content-center align-items-center vh-100">
+                  <BeatLoader />
+                </div>
+             ) : movies.length === 0 ? (
                 <Col>The list is empty!</Col>
+                ) : filteredMovies.length === 0 ? (
+                  <Col className="text-center mt-4">No movies match your search.</Col>
               ) : (
                 <>
-                  {movies.map((movie) => (
+                  {filteredMovies.map((movie) => (
                     <Col className="mb-4" key={movie.id} md={3}>
                       <MovieCard movie={movie} user={user} token={token} setUser={setUser} />
                     </Col>
