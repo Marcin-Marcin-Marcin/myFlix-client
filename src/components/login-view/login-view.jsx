@@ -38,36 +38,6 @@ export const LoginView = ({ onLoggedIn }) => {
        });
   };
 
-
-  // Replaced with the React Bootstrap Form
-  /*
-  return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Username:
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          minLength="6"
-        />
-      </label>
-      <label>
-        Password:
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
-  );
-};
-*/
-
 return (
     <Form onSubmit={handleSubmit}>
       <Form.Group controlId="formUsername">
