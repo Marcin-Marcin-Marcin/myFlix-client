@@ -8,10 +8,10 @@ import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 import {
   BrowserRouter, Routes, Route, Navigate, Link
 } from "react-router-dom";
-import { BeatLoader } from "react-spinners";
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -115,7 +115,7 @@ export const MainView = () => {
                 <Navigate to="/login" replace />
               ) : loading ? (
                 <div className="d-flex justify-content-center align-items-center vh-100">
-                  <BeatLoader />
+                  <Spinner animation="border" role="status" />
                 </div>
               ) : movies.length === 0 ? (
                 <Col>The list is empty!</Col>
@@ -140,7 +140,7 @@ export const MainView = () => {
                 </Col>
               ) : loading ? (
                 <div className="d-flex justify-content-center align-items-center vh-100">
-                  <BeatLoader />
+                  <Spinner animation="border" role="status" />
                 </div>
               ) : movies.length === 0 ? (
                 <Col>The list is empty!</Col>
