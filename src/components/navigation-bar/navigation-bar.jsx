@@ -33,7 +33,6 @@ export const NavigationBar = ({ user, onLoggedOut, searchItem, setSearchItem }) 
               </>
             )}
           </Nav>
-
           {user && (
             <Form className="d-flex">
               <Form.Control

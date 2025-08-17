@@ -9,10 +9,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import {
-  BrowserRouter, Routes, Route, Navigate
+  BrowserRouter, Routes, Route, Navigate, Link
 } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
-
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -37,10 +36,8 @@ export const MainView = () => {
         if (!response.ok) {
           throw new Error(`HTTP error ${response.status}`);
         }
-        
         return response.json();
-        })
-
+      })
       .then((data) => {
         const moviesFromApi = data.map((movie) => {
           return {
@@ -52,23 +49,22 @@ export const MainView = () => {
             genre: movie.Genre?.Name || "Unknown Genre"
           };
         });
-
         setMovies(moviesFromApi);
       })
       .catch((err) => {
-        console.error("Error fetching movies:", err); 
-        setMovies([]);                               
+        console.error("Error fetching movies:", err);
+        setMovies([]);
       })
-      .finally(() => setLoading(false)); 
+      .finally(() => setLoading(false));
   }, [token]);
 
-const filteredMovies = searchItem
+  const filteredMovies = searchItem
     ? movies.filter((m) =>
         m.title.toLowerCase().includes(searchItem.toLowerCase())
       )
     : movies;
 
- return (
+  return (
     <BrowserRouter>
       <NavigationBar
         user={user}
@@ -78,9 +74,8 @@ const filteredMovies = searchItem
           localStorage.clear();
           setSearchItem("");
         }}
-      searchItem={searchItem} 
-      setSearchItem={setSearchItem}
-
+        searchItem={searchItem}
+        setSearchItem={setSearchItem}
       />
       <Row className="justify-content-md-center">
         <Routes>
@@ -135,15 +130,22 @@ const filteredMovies = searchItem
             path="/"
             element={
               !user ? (
-                <Navigate to="/login" replace />
+                <Col md={6} className="text-center mt-5">
+                  <h2>Welcome to myFlix</h2>
+                  <p>Please log in or sign up to continue.</p>
+                  <div className="d-flex justify-content-center gap-3">
+                    <Link to="/login"><Button variant="primary">Log in</Button></Link>
+                    <Link to="/signup"><Button variant="outline-primary">Sign up</Button></Link>
+                  </div>
+                </Col>
               ) : loading ? (
                 <div className="d-flex justify-content-center align-items-center vh-100">
                   <BeatLoader />
                 </div>
-             ) : movies.length === 0 ? (
+              ) : movies.length === 0 ? (
                 <Col>The list is empty!</Col>
-                ) : filteredMovies.length === 0 ? (
-                  <Col className="text-center mt-4">No movies match your search.</Col>
+              ) : filteredMovies.length === 0 ? (
+                <Col className="text-center mt-4">No movies match your search.</Col>
               ) : (
                 <>
                   {filteredMovies.map((movie) => (
@@ -156,17 +158,17 @@ const filteredMovies = searchItem
             }
           />
           <Route
-  path="/profile"
-  element={
-    !user ? (
-      <Navigate to="/login" replace />
-    ) : (
-      <Col md={8}>
-        <ProfileView movies={movies} />
-      </Col>
-    )
-  }
-/>
+            path="/profile"
+            element={
+              !user ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <Col md={8}>
+                  <ProfileView movies={movies} />
+                </Col>
+              )
+            }
+          />
         </Routes>
       </Row>
     </BrowserRouter>
