@@ -1,3 +1,4 @@
+// main-view.jsx
 import { useEffect, useState } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
@@ -24,6 +25,13 @@ export const MainView = () => {
   const [loading, setLoading] = useState(false);
   const [searchItem, setSearchItem] = useState("");
 
+  const normalizeImageUrl = (path) => {
+    if (!path) return null;
+    if (/^https?:\/\//i.test(path)) return path;
+    const BASE = "https://mymyflixapp-46a281636c8c.herokuapp.com";
+    return path.startsWith("/") ? `${BASE}${path}` : `${BASE}/${path}`;
+  };
+
   useEffect(() => {
     if (!token) return;
 
@@ -43,7 +51,7 @@ export const MainView = () => {
           return {
             id: movie._id?.$oid || movie._id,
             title: movie.Title,
-            image: movie.ImagePath,
+            image: normalizeImageUrl(movie.ImagePath),
             director: movie.Director?.Name,
             description: movie.Description,
             genre: movie.Genre?.Name || "Unknown Genre"

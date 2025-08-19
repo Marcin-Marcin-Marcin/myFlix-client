@@ -1,3 +1,4 @@
+// movie-card.jsx
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -30,14 +31,22 @@ export const MovieCard = ({ movie, user, token, setUser }) => {
 
   return (
     <Card className="p-4 h-100 shadow-sm">
-      <Card.Img variant="top" src={movie.image} />
+      <Card.Img
+        variant="top"
+        src={movie.image || "https://i.sstatic.net/y9DpT.jpg"}
+        loading="lazy"
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = "https://i.sstatic.net/y9DpT.jpg";
+        }}
+      />
       <Card.Body>
         <Card.Title>{movie.title}</Card.Title>
         <Card.Text>
           <strong>Director:</strong> {movie.director}<br />
           <strong>Genre:</strong> {movie.genre}<br />
           <small className="text-muted">{movie.description.slice(0, 100)}...</small>
-          </Card.Text>
+        </Card.Text>
 
         <div className="d-flex justify-content-between align-items-center mt-3">
           <Link to={`/movies/${encodeURIComponent(movie.id)}`}>

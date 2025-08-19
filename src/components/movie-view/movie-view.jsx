@@ -1,3 +1,4 @@
+// movie-view.jsx
 import { useParams, Link } from "react-router-dom";
 import { Card, Button } from "react-bootstrap";
 import "./movie-view.scss";
@@ -38,7 +39,15 @@ export const MovieView = ({ movies, user, token, setUser }) => {
 
   return (
     <Card className="p-4 mt-3 shadow-sm">
-      <Card.Img variant="top" src={movie.image} />
+      <Card.Img
+        variant="top"
+        src={movie.image || "https://i.sstatic.net/y9DpT.jpg"}
+        loading="lazy"
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = "https://i.sstatic.net/y9DpT.jpg";
+        }}
+      />
       <Card.Body>
         <Card.Title>{movie.title}</Card.Title>
         <Card.Text><strong>Director:</strong> {movie.director}</Card.Text>
